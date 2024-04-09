@@ -12,6 +12,7 @@ namespace Biblioteca.Controladores
             //Constructores de las clases e interfaces
             MenuInterfaz mi = new MenuImplementacion();
             BibliotecaInterfaz bl = new BibliotecaImplementacion();
+            ClienteInterfaz Cl = new ClienteImplementacion();
 
             //Listas de las clases
             List<BibliotecasDto> bibliotecaLista = new List<BibliotecasDto> ();
@@ -32,8 +33,6 @@ namespace Biblioteca.Controladores
             int segundoMenuOpcion;
             bool cerrarMenu=false;
 
-            string[] contenidoFicheroBT;
-
           
             
 
@@ -42,19 +41,7 @@ namespace Biblioteca.Controladores
                 do
                 {
                     //Condicion de si existe el fichero se muestre por pantalla el contenido
-                    if (File.Exists(ficheroBibliotecaTotal))
-                    {
-                        string[] todasBiblios = File.ReadAllLines(ficheroBibliotecaTotal);
-                        Console.WriteLine("Aqui observaras todas las bibliotecas que se encuentran disponible");
-                        foreach (string line in todasBiblios)
-                        {
-                            Console.WriteLine(line);
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("No hay ninguna biblioteca disponible para enseñar");
-                    }
+                    condicionDeMostrarContenido(ficheroBibliotecaTotal);
 
                     opcionMenuPrincipal = mi.menuInicial();
                     switch (opcionMenuPrincipal)
@@ -66,34 +53,33 @@ namespace Biblioteca.Controladores
                             bl.darAltaBiblioteca(bibliotecaLista);
                             break;
                         case 2:
+                            //Condicion de que si no hay bibliotecas no puedes utilizar esta funcion
                             if (bibliotecaLista.Count > 0)
                             {
+                                //Tendria que ir el metodo estatico que verifica el id de la biblioteca
                                 Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
                                 long identificadorGlobal = Int32.Parse(Console.ReadLine());
 
-                                foreach (BibliotecasDto biblio in bibliotecaLista)
+                                if (validacionIdBiblio(bibliotecaLista))
                                 {
-                                    if (biblio.IdBiblioteca == identificadorGlobal)
+                                    segundoMenuOpcion = mi.menuSecundario();
+                                    switch (segundoMenuOpcion)
                                     {
-                                        segundoMenuOpcion = mi.menuSecundario();
-                                        switch (segundoMenuOpcion)
-                                        {
-                                            case 0:
-                                                Console.WriteLine("[INFOS]- Se volvera a la pagina principal");
-                                                break;
-                                            case 1:
-                                                //Cliente Alta
-                                                break;
-                                            case 2:
-                                                //Libro alta
-                                                break;
-                                            case 3:
-                                                //Prestamo Alta
-                                                break;
-                                            default:
-                                                Console.WriteLine("No has elegido ninguna de las opciones anteriormente, se volvera al menu inicial");
-                                                break;
-                                        }
+                                        case 0:
+                                            Console.WriteLine("[INFOS]- Se volvera a la pagina principal");
+                                            break;
+                                        case 1:
+                                            //Cliente Alta
+                                            break;
+                                        case 2:
+                                            //Libro alta
+                                            break;
+                                        case 3:
+                                            //Prestamo Alta
+                                            break;
+                                        default:
+                                            Console.WriteLine("No has elegido ninguna de las opciones anteriormente, se volvera al menu inicial");
+                                            break;
                                     }
                                 }
                             }
@@ -108,34 +94,63 @@ namespace Biblioteca.Controladores
                     }
                 } while (!cerrarMenu);
 
-
-               
+                /*  swbt.Write($"------------------------------------------ \n" +
+                                 $"Fecha del registro-->{fecha}" + "\n" +
+                                 $"Id--> {bibliotecaLista[bibliotecaLista.Count - 1].IdBiblioteca}\n" +
+                                 $"Nombre-->{bibliotecaLista[bibliotecaLista.Count - 1].NombreBiblioteca}\n" +
+                                 $"Direccion--> {bibliotecaLista[bibliotecaLista.Count - 1].DireccionBiblioteca}\n" +
+                                 $"------------------------------------------");
+             */
 
 
             }
             catch (Exception e)
             {
                 Console.WriteLine("la pagina esta ahora mismo deshabilitada, por favor intentole de nuevo en 5 minutos");
-                StreamWriter sw1 = new StreamWriter(ficheroErrores);
-                sw1.WriteLine(e.Message + "-->" + fecha);
-                sw1.Close();
+                StreamWriter swE = new StreamWriter(ficheroErrores);
+                swE.WriteLine(e.Message + "-->" + fecha);
+                swE.Close();
 
             }
 
 
-            /*  swbt.Write($"------------------------------------------ \n" +
-                                $"Fecha del registro-->{fecha}" + "\n" +
-                                $"Id--> {bibliotecaLista[bibliotecaLista.Count - 1].IdBiblioteca}\n" +
-                                $"Nombre-->{bibliotecaLista[bibliotecaLista.Count - 1].NombreBiblioteca}\n" +
-                                $"Direccion--> {bibliotecaLista[bibliotecaLista.Count - 1].DireccionBiblioteca}\n" +
-                                $"------------------------------------------");
-            */
+            
 
         }
 
-        public static void validacionIdBiblio()
+        //Metodo que muestra la si hay fichero en el fichero todo el contenido 
+        public static void condicionDeMostrarContenido(string ficheroBibliotecaTotal)
         {
+            if (File.Exists(ficheroBibliotecaTotal))
+            {
+                string[] todasBiblios = File.ReadAllLines(ficheroBibliotecaTotal);
+                Console.WriteLine("Aqui observaras todas las bibliotecas que se encuentran disponible");
+                foreach (string line in todasBiblios)
+                {
+                    Console.WriteLine(line);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No hay ninguna biblioteca disponible para enseñar");
+            }
+        }
 
+        //Metodo que valida si el id de la biblioteca existe o no
+        public static bool validacionIdBiblio(List<BibliotecasDto> bibliotecaLista)
+        {
+            //Tendria que ir el metodo estatico que verifica el id de la biblioteca
+            Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
+            long identificadorGlobal = Int32.Parse(Console.ReadLine());
+
+            foreach (BibliotecasDto biblio in bibliotecaLista)
+            {
+                if (biblio.IdBiblioteca == identificadorGlobal)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
