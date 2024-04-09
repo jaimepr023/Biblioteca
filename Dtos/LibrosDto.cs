@@ -9,6 +9,7 @@ namespace Biblioteca.Dtos
     internal class LibrosDto
     {
         long idLibro;
+        long identificadorBibliotecaLibros;
         string TituloLibro = "aaaaa";
         string subtituloLibro = "aaaaa";
         string autor = "aaaaa";
@@ -25,8 +26,9 @@ namespace Biblioteca.Dtos
         public int NumEdicionLibro { get => numEdicionLibro; set => numEdicionLibro = value; }
         public string EditorialLibro { get => editorialLibro; set => editorialLibro = value; }
         public long Strock { get => strock; set => strock = value; }
+        public long IdentificadorBibliotecaLibros { get => identificadorBibliotecaLibros; set => identificadorBibliotecaLibros = value; }
 
-        public LibrosDto(long idLibro, string tituloLibro, string subtituloLibro, string autor, string iSBN, int numEdicionLibro, string editorialLibro, long strock)
+        public LibrosDto(long idLibro, string tituloLibro, string subtituloLibro, string autor, string iSBN, int numEdicionLibro, string editorialLibro, long strock, long identificadorBibliotecaLibros)
         {
             this.idLibro = idLibro;
             TituloLibro = tituloLibro;
@@ -36,6 +38,7 @@ namespace Biblioteca.Dtos
             this.numEdicionLibro = numEdicionLibro;
             this.editorialLibro = editorialLibro;
             this.strock = strock;
+            this.identificadorBibliotecaLibros = identificadorBibliotecaLibros;
         }
 
         public LibrosDto()

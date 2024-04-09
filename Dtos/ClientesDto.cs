@@ -9,6 +9,7 @@ namespace Biblioteca.Dtos
     internal class ClientesDto
     {
         int idClientes;
+        long identificadorBibliotecaCliente;
         string nombreCliente = "aaaaa";
         DateTime fechaNacimiento = new DateTime(30 - 12 - 9999);
         string dNICliente = "aaaaa";
@@ -23,8 +24,9 @@ namespace Biblioteca.Dtos
         public string CorreoCliente { get => correoCliente; set => correoCliente = value; }
         public DateTime FechaInicioSupension { get => fechaInicioSupension; set => fechaInicioSupension = value; }
         public DateTime FechaFinSupension { get => fechaFinSupension; set => fechaFinSupension = value; }
+        public long IdentificadorBibliotecaCliente { get => identificadorBibliotecaCliente; set => identificadorBibliotecaCliente = value; }
 
-        public ClientesDto(int idClientes, string nombreCliente, DateTime fechaNacimiento, string dNICliente, string correoCliente)
+        public ClientesDto(int idClientes, string nombreCliente, DateTime fechaNacimiento, string dNICliente, string correoCliente, long identificadorBibliotecaCliente)
         {
             this.idClientes = idClientes;
             this.nombreCliente = nombreCliente;
@@ -33,6 +35,7 @@ namespace Biblioteca.Dtos
             this.correoCliente = correoCliente;
             this.fechaInicioSupension = fechaInicioSupension;
             this.fechaFinSupension = fechaFinSupension;
+            this.identificadorBibliotecaCliente = identificadorBibliotecaCliente;
         }
 
         public ClientesDto()

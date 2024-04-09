@@ -9,36 +9,53 @@ namespace Biblioteca.Controladores
         {
             DateTime fecha = DateTime.Now;
 
+            //Constructores de las clases e interfaces
             MenuInterfaz mi = new MenuImplementacion();
             BibliotecaInterfaz bl = new BibliotecaImplementacion();
 
+            //Listas de las clases
             List<BibliotecasDto> bibliotecaLista = new List<BibliotecasDto> ();
             List<ClientesDto> clienteLista = new List<ClientesDto> ();
             List<LibrosDto> librosLista = new List<LibrosDto> ();
             List<PrestamosDto> prestamosLista = new List<PrestamosDto> ();
 
+
+            //Creacion de los ficheros
             string ficheroErrores = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroErrores";
             string ficheroBibliotecaTotal = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroBibliotecaTotal";
-            
+            string ficheroClientes = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroClientes";
+            string ficheroLibros = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficherosLibros";
+            string ficheroPrestamos = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficherosPrestamos";
+
 
             int opcionMenuPrincipal;
             int segundoMenuOpcion;
             bool cerrarMenu=false;
 
+            string[] contenidoFicheroBT;
 
-            string[] todasBiblios = File.ReadAllLines(ficheroBibliotecaTotal);
-            Console.WriteLine("Aqui observaras todas las bibliotecas que se encuentran disponible");
-            foreach(string line in todasBiblios)
-            {
-                Console.WriteLine(line);
-            }
-            StreamWriter swbt = new StreamWriter(ficheroBibliotecaTotal, true);
-            StreamWriter swb = new StreamWriter(ficheroBibliotecaTotal, true);
+          
+            
 
             try
             {
                 do
                 {
+                    //Condicion de si existe el fichero se muestre por pantalla el contenido
+                    if (File.Exists(ficheroBibliotecaTotal))
+                    {
+                        string[] todasBiblios = File.ReadAllLines(ficheroBibliotecaTotal);
+                        Console.WriteLine("Aqui observaras todas las bibliotecas que se encuentran disponible");
+                        foreach (string line in todasBiblios)
+                        {
+                            Console.WriteLine(line);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No hay ninguna biblioteca disponible para enseñar");
+                    }
+
                     opcionMenuPrincipal = mi.menuInicial();
                     switch (opcionMenuPrincipal)
                     {
@@ -47,25 +64,16 @@ namespace Biblioteca.Controladores
                             break;
                         case 1:
                             bl.darAltaBiblioteca(bibliotecaLista);
-                            
-                                    swbt.Write($"------------------------------------------ \n" +
-                                        $"Fecha del registro-->{fecha}" +
-                                        $"Id--> {bibliotecaLista[bibliotecaLista.Count-1].IdBiblioteca}\n" +
-                                        $"Nombre-->{bibliotecaLista[bibliotecaLista.Count - 1].NombreBiblioteca}\n" +
-                                        $"Direccion--> {bibliotecaLista[bibliotecaLista.Count - 1].DireccionBiblioteca}\n" +
-                                        $"------------------------------------------");
-                             
-                            
-                            string ficheroBiblio = $"C:\\Users\\profesor\\Desktop\\Biblioteca\\{bibliotecaLista[bibliotecaLista.Count - 1].NombreBiblioteca}";
                             break;
                         case 2:
                             if (bibliotecaLista.Count > 0)
                             {
-                                Console.WriteLine("Dame el nombre de la biblioteca a la que quieres entrar:");
-                                string confirmacionNombre = Console.ReadLine();
+                                Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
+                                long identificadorGlobal = Int32.Parse(Console.ReadLine());
+
                                 foreach (BibliotecasDto biblio in bibliotecaLista)
                                 {
-                                    if (biblio.NombreBiblioteca.Equals(confirmacionNombre))
+                                    if (biblio.IdBiblioteca == identificadorGlobal)
                                     {
                                         segundoMenuOpcion = mi.menuSecundario();
                                         switch (segundoMenuOpcion)
@@ -99,18 +107,34 @@ namespace Biblioteca.Controladores
                             break;
                     }
                 } while (!cerrarMenu);
-            }catch (Exception e)
+
+
+               
+
+
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("la pagina esta ahora mismo deshabilitada, por favor intentole de nuevo en 5 minutos");
                 StreamWriter sw1 = new StreamWriter(ficheroErrores);
-                sw1.WriteLine(e.Message);
+                sw1.WriteLine(e.Message + "-->" + fecha);
                 sw1.Close();
 
             }
 
-            swb.Close();
-            swbt.Close();
-            
+
+            /*  swbt.Write($"------------------------------------------ \n" +
+                                $"Fecha del registro-->{fecha}" + "\n" +
+                                $"Id--> {bibliotecaLista[bibliotecaLista.Count - 1].IdBiblioteca}\n" +
+                                $"Nombre-->{bibliotecaLista[bibliotecaLista.Count - 1].NombreBiblioteca}\n" +
+                                $"Direccion--> {bibliotecaLista[bibliotecaLista.Count - 1].DireccionBiblioteca}\n" +
+                                $"------------------------------------------");
+            */
+
+        }
+
+        public static void validacionIdBiblio()
+        {
 
         }
     }
