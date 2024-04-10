@@ -18,6 +18,7 @@ namespace Biblioteca.Controladores
             //Constructores de las clases e interfaces
             MenuInterfaz mi = new MenuImplementacion();
             BibliotecaImplementacion bl = new BibliotecaImplementacion();
+          
 
             //Creacion de los ficheros
             string ficheroErrores = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroErrores";
@@ -49,39 +50,29 @@ namespace Biblioteca.Controladores
                             bl.alta();
                             break;
                         case 2:
-                            //Todavia falta ponerlo mas simplificado
+                         
                             //Condicion de que si no hay bibliotecas no puedes utilizar esta funcion
                             if (program.bibliotecaLista.Count > 0)
                             {
-                                //Metodo estatico que verifica el id de la biblioteca
-                                Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
-                                long identificadorGlobal = Int32.Parse(Console.ReadLine());
-
-                                foreach (BibliotecasDto biblio in program.bibliotecaLista)  
+                                //Metodo acceso realizado en la clase opeativa e instanciado por la clase biblioteca
+                                bl.acceso();
+                                switch (segundoMenuOpcion= mi.menuSecundario())
                                 {
-
-                                    if (biblio.IdBiblioteca == identificadorGlobal)
-                                    {
-                                        segundoMenuOpcion = mi.menuSecundario();
-                                        switch (segundoMenuOpcion)
-                                        {
-                                            case 0:
-                                                Console.WriteLine("[INFOS]- Se volvera a la pagina principal");
-                                                break;
-                                            case 1:
-                                                //Cliente Alta
-                                                break;
-                                            case 2:
-                                                //Libro alta
-                                                break;
-                                            case 3:
-                                                //Prestamo Alta
-                                                break;
-                                            default:
-                                                Console.WriteLine("No has elegido ninguna de las opciones anteriormente, se volvera al menu inicial");
-                                                break;
-                                        }
-                                    }
+                                    case 0:
+                                        Console.WriteLine("[INFOS]- Se volvera a la pagina principal");
+                                        break;
+                                    case 1:
+                                        //Cliente Alta
+                                        break;
+                                    case 2:
+                                        //Libro alta
+                                        break;
+                                    case 3:
+                                        //Prestamo Alta
+                                        break;
+                                    default:
+                                        Console.WriteLine("No has elegido ninguna de las opciones anteriormente, se volvera al menu inicial");
+                                        break;
                                 }
                             }
                             else
@@ -124,7 +115,7 @@ namespace Biblioteca.Controladores
             }
         }
 
-        //Sirve para utilizarlo de Fk entre las demas funcionalidades y relacionarlas con la biblioteca
+        //Sirve para utilizarlo de Fk entre las demas funcionalidades y relacionarlas con la biblioteca(nos falta instanciarla)
         public static long idBiblioteca;
     }
 }
