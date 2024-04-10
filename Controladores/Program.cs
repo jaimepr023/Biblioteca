@@ -5,21 +5,19 @@ namespace Biblioteca.Controladores
 {
     class program
     {
+        //Listas de las clases
+        public static List<BibliotecasDto> bibliotecaLista = new List<BibliotecasDto>();
+        public static List<ClientesDto> clienteLista = new List<ClientesDto>();
+        public static List<LibrosDto> librosLista = new List<LibrosDto>();
+        public static List<PrestamosDto> prestamosLista = new List<PrestamosDto>();
+
         public static void Main(string[] args)
         {
             DateTime fecha = DateTime.Now;
 
             //Constructores de las clases e interfaces
             MenuInterfaz mi = new MenuImplementacion();
-            BibliotecaInterfaz bl = new BibliotecaImplementacion();
-            ClienteInterfaz Cl = new ClienteImplementacion();
-
-            //Listas de las clases
-            List<BibliotecasDto> bibliotecaLista = new List<BibliotecasDto> ();
-            List<ClientesDto> clienteLista = new List<ClientesDto> ();
-            List<LibrosDto> librosLista = new List<LibrosDto> ();
-            List<PrestamosDto> prestamosLista = new List<PrestamosDto> ();
-
+            BibliotecaImplementacion bl = new BibliotecaImplementacion();
 
             //Creacion de los ficheros
             string ficheroErrores = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroErrores";
@@ -27,14 +25,11 @@ namespace Biblioteca.Controladores
             string ficheroClientes = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroClientes";
             string ficheroLibros = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficherosLibros";
             string ficheroPrestamos = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficherosPrestamos";
-
-
+        
+            //Variables de flujo
             int opcionMenuPrincipal;
             int segundoMenuOpcion;
             bool cerrarMenu=false;
-
-          
-            
 
             try
             {
@@ -47,39 +42,45 @@ namespace Biblioteca.Controladores
                     switch (opcionMenuPrincipal)
                     {
                         case 0:
+                            //Guardar ficheros
                             cerrarMenu = true;
                             break;
                         case 1:
-                            bl.darAltaBiblioteca(bibliotecaLista);
+                            bl.alta();
                             break;
                         case 2:
+                            //Todavia falta ponerlo mas simplificado
                             //Condicion de que si no hay bibliotecas no puedes utilizar esta funcion
-                            if (bibliotecaLista.Count > 0)
+                            if (program.bibliotecaLista.Count > 0)
                             {
-                                //Tendria que ir el metodo estatico que verifica el id de la biblioteca
+                                //Metodo estatico que verifica el id de la biblioteca
                                 Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
                                 long identificadorGlobal = Int32.Parse(Console.ReadLine());
 
-                                if (validacionIdBiblio(bibliotecaLista))
+                                foreach (BibliotecasDto biblio in program.bibliotecaLista)  
                                 {
-                                    segundoMenuOpcion = mi.menuSecundario();
-                                    switch (segundoMenuOpcion)
+
+                                    if (biblio.IdBiblioteca == identificadorGlobal)
                                     {
-                                        case 0:
-                                            Console.WriteLine("[INFOS]- Se volvera a la pagina principal");
-                                            break;
-                                        case 1:
-                                            //Cliente Alta
-                                            break;
-                                        case 2:
-                                            //Libro alta
-                                            break;
-                                        case 3:
-                                            //Prestamo Alta
-                                            break;
-                                        default:
-                                            Console.WriteLine("No has elegido ninguna de las opciones anteriormente, se volvera al menu inicial");
-                                            break;
+                                        segundoMenuOpcion = mi.menuSecundario();
+                                        switch (segundoMenuOpcion)
+                                        {
+                                            case 0:
+                                                Console.WriteLine("[INFOS]- Se volvera a la pagina principal");
+                                                break;
+                                            case 1:
+                                                //Cliente Alta
+                                                break;
+                                            case 2:
+                                                //Libro alta
+                                                break;
+                                            case 3:
+                                                //Prestamo Alta
+                                                break;
+                                            default:
+                                                Console.WriteLine("No has elegido ninguna de las opciones anteriormente, se volvera al menu inicial");
+                                                break;
+                                        }
                                     }
                                 }
                             }
@@ -93,16 +94,6 @@ namespace Biblioteca.Controladores
                             break;
                     }
                 } while (!cerrarMenu);
-
-                /*  swbt.Write($"------------------------------------------ \n" +
-                                 $"Fecha del registro-->{fecha}" + "\n" +
-                                 $"Id--> {bibliotecaLista[bibliotecaLista.Count - 1].IdBiblioteca}\n" +
-                                 $"Nombre-->{bibliotecaLista[bibliotecaLista.Count - 1].NombreBiblioteca}\n" +
-                                 $"Direccion--> {bibliotecaLista[bibliotecaLista.Count - 1].DireccionBiblioteca}\n" +
-                                 $"------------------------------------------");
-             */
-
-
             }
             catch (Exception e)
             {
@@ -112,11 +103,8 @@ namespace Biblioteca.Controladores
                 swE.Close();
 
             }
-
-
-            
-
         }
+
 
         //Metodo que muestra la si hay fichero en el fichero todo el contenido 
         public static void condicionDeMostrarContenido(string ficheroBibliotecaTotal)
@@ -136,21 +124,7 @@ namespace Biblioteca.Controladores
             }
         }
 
-        //Metodo que valida si el id de la biblioteca existe o no
-        public static bool validacionIdBiblio(List<BibliotecasDto> bibliotecaLista)
-        {
-            //Tendria que ir el metodo estatico que verifica el id de la biblioteca
-            Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
-            long identificadorGlobal = Int32.Parse(Console.ReadLine());
-
-            foreach (BibliotecasDto biblio in bibliotecaLista)
-            {
-                if (biblio.IdBiblioteca == identificadorGlobal)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        //Sirve para utilizarlo de Fk entre las demas funcionalidades y relacionarlas con la biblioteca
+        public static long idBiblioteca;
     }
 }

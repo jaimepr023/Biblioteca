@@ -4,34 +4,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Biblioteca.Controladores;
 
 namespace Biblioteca.Servicios
 {
-    internal class BibliotecaImplementacion : BibliotecaInterfaz
+    internal class BibliotecaImplementacion : Operativa
     {
-        public void darAltaBiblioteca(List<BibliotecasDto> ListaB)
+        override
+        public  void alta()
         {
-            long id = idAutomatico(ListaB);
+            Console.WriteLine("Alta de una nueva biblioteca");
+            long id = idAutomatico();
             Console.WriteLine("Dame el nombre de la nueva biblioteca:");
             string nombre = Console.ReadLine();
             Console.WriteLine("Dame la direccion donde se encuentra la nueva biblioteca:");
             string direccion = Console.ReadLine();
-            BibliotecasDto bibl = new BibliotecasDto(id,nombre,direccion);
-            ListaB.Add(bibl);
-            
-        }
+            BibliotecasDto bibl = new BibliotecasDto(id, nombre, direccion);
+            program.bibliotecaLista.Add(bibl);
 
-        private long idAutomatico(List<BibliotecasDto> ListaB)
+        }
+        private long idAutomatico()
         {
-           int tamañoLista = ListaB.Count;
             long idAutomatico;
-            if (tamañoLista <= 0)
+            if (program.bibliotecaLista.Count <= 0)
             {
                 idAutomatico = 1;
             }
             else
             {
-                idAutomatico = ListaB[tamañoLista - 1].IdBiblioteca + 1;
+                idAutomatico = program.bibliotecaLista[program.bibliotecaLista.Count - 1].IdBiblioteca + 1;
             }
 
             return idAutomatico;
