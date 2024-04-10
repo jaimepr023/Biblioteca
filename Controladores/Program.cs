@@ -5,7 +5,7 @@ namespace Biblioteca.Controladores
 {
     class program
     {
-        //Listas de las clases
+        //Listas de las clases en forma estatica para tenerlo mas a mano a la hora de llamarlos
         public static List<BibliotecasDto> bibliotecaLista = new List<BibliotecasDto>();
         public static List<ClientesDto> clienteLista = new List<ClientesDto>();
         public static List<LibrosDto> librosLista = new List<LibrosDto>();
@@ -31,6 +31,11 @@ namespace Biblioteca.Controladores
             int opcionMenuPrincipal;
             int segundoMenuOpcion;
             bool cerrarMenu=false;
+
+
+
+            //Aqui tendria que hacerse la añadida de la documentacion anterior de las listas
+
 
             try
             {
