@@ -5,12 +5,6 @@ namespace Biblioteca.Controladores
 {
     class program
     {
-        //Listas de las clases en forma estatica para tenerlo mas a mano a la hora de llamarlos
-        public static List<BibliotecasDto> bibliotecaLista = new List<BibliotecasDto>();
-        public static List<ClientesDto> clienteLista = new List<ClientesDto>();
-        public static List<LibrosDto> librosLista = new List<LibrosDto>();
-        public static List<PrestamosDto> prestamosLista = new List<PrestamosDto>();
-
         public static void Main(string[] args)
         {
             DateTime fecha = DateTime.Now;
@@ -21,11 +15,11 @@ namespace Biblioteca.Controladores
           
 
             //Creacion de los ficheros
-            string ficheroErrores = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroErrores";
-            string ficheroBibliotecaTotal = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroBibliotecaTotal";
-            string ficheroClientes = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficheroClientes";
-            string ficheroLibros = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficherosLibros";
-            string ficheroPrestamos = "C:\\Users\\profesor\\Desktop\\Biblioteca\\ficherosPrestamos";
+            string ficheroErrores = "C:\\Users\\vspc\\OneDrive\\Escritorio\\Biblioteca\\ficheroErrores";
+            string ficheroBibliotecaTotal = "C:\\Users\\vspc\\OneDrive\\Escritorio\\Biblioteca\\ficheroBibliotecaTotal";
+            string ficheroClientes = "C:\\Users\\vspc\\OneDrive\\Escritorio\\Biblioteca\\ficheroClientes";
+            string ficheroLibros = "C:\\Users\\vspc\\OneDrive\\Escritorio\\Biblioteca\\ficherosLibros";
+            string ficheroPrestamos = "C:\\Users\\vspc\\OneDrive\\Escritorio\\Biblioteca\\ficherosPrestamos";
         
             //Variables de flujo
             int opcionMenuPrincipal;
@@ -35,12 +29,10 @@ namespace Biblioteca.Controladores
             try
             {
                 //Aqui tendria que hacerse la añadida de la documentacion anterior de las listas
-                string[] contenidoFichero;
+                //Condicion de si existe el fichero se muestre por pantalla el contenido
+                condicionDeMostrarContenido(ficheroBibliotecaTotal);
                 do
                 {
-                    //Condicion de si existe el fichero se muestre por pantalla el contenido
-                    condicionDeMostrarContenido(ficheroBibliotecaTotal);
-
                     opcionMenuPrincipal = mi.menuInicial();
                     switch (opcionMenuPrincipal)
                     {
@@ -104,12 +96,26 @@ namespace Biblioteca.Controladores
             }
         }
 
+        //Listas de las clases en forma estatica para tenerlo mas a mano a la hora de llamarlos
+        public static List<BibliotecasDto> bibliotecaLista = new List<BibliotecasDto>();
+        public static List<ClientesDto> clienteLista = new List<ClientesDto>();
+        public static List<LibrosDto> librosLista = new List<LibrosDto>();
+        public static List<PrestamosDto> prestamosLista = new List<PrestamosDto>();
 
-        //Metodo que muestra la si hay fichero en el fichero todo el contenido 
+
+        //Metodo que muestra la si hay fichero en el fichero todo el contenido y gurda el contenido de los ficheros en las listas  
         public static void condicionDeMostrarContenido(string ficheroBibliotecaTotal)
         {
             if (File.Exists(ficheroBibliotecaTotal))
             {
+                string[] contenidoFichero = File.ReadAllLines(ficheroBibliotecaTotal);
+                foreach (string contenido in contenidoFichero)
+                {
+                    string[] partesDeLaLineas = contenido.Split(';');
+                    BibliotecasDto biblio2 = new BibliotecasDto(Int64.Parse(partesDeLaLineas[0]), partesDeLaLineas[1], partesDeLaLineas[2]);
+                    program.bibliotecaLista.Add(biblio2);
+                }
+
                 string[] todasBiblios = File.ReadAllLines(ficheroBibliotecaTotal);
                 Console.WriteLine("Aqui observaras todas las bibliotecas que se encuentran disponible");
                 foreach (string line in todasBiblios)
@@ -122,6 +128,7 @@ namespace Biblioteca.Controladores
                 Console.WriteLine("No hay ninguna biblioteca disponible para enseñar");
             }
         }
+ 
 
         //Sirve para utilizarlo de Fk entre las demas funcionalidades y relacionarlas con la biblioteca(nos falta instanciarla)
         public static long idBiblioteca;

@@ -20,20 +20,19 @@ namespace Biblioteca.Servicios
                 List<long> todosLosIdsBiblios = new List<long>();
                 long identificadorGlobal;
             foreach (BibliotecasDto biblio in program.bibliotecaLista)
-                {
+            {
                     Console.WriteLine($"Id-->{biblio.IdBiblioteca}\n" +
                         $"Nombre-->{biblio.NombreBiblioteca}\n");
                     todosLosIdsBiblios.Add(biblio.IdBiblioteca);
 
-                }
+            }
 
             do
             {
                 //Metodo estatico que verifica el id de la biblioteca
                 Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
                 identificadorGlobal = Int32.Parse(Console.ReadLine());
-            } while (!todosLosIdsBiblios.Contains(identificadorGlobal));
-                
+            } while (!todosLosIdsBiblios.Contains(identificadorGlobal));    
         }
     }
 }
