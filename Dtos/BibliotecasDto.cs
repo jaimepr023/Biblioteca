@@ -26,6 +26,6 @@ namespace Biblioteca.Dtos
 
         public BibliotecasDto()
         {
-        }
+        }  
     }
 }

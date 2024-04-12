@@ -32,13 +32,10 @@ namespace Biblioteca.Controladores
             int segundoMenuOpcion;
             bool cerrarMenu=false;
 
-
-
-            //Aqui tendria que hacerse la añadida de la documentacion anterior de las listas
-
-
             try
             {
+                //Aqui tendria que hacerse la añadida de la documentacion anterior de las listas
+                string[] contenidoFichero;
                 do
                 {
                     //Condicion de si existe el fichero se muestre por pantalla el contenido
@@ -49,6 +46,12 @@ namespace Biblioteca.Controladores
                     {
                         case 0:
                             //Guardar ficheros
+                            StreamWriter sw = new StreamWriter(ficheroBibliotecaTotal);
+                            foreach (BibliotecasDto biblio in bibliotecaLista)
+                            {
+                                sw.Write($"{biblio.IdBiblioteca};{biblio.NombreBiblioteca};{biblio.DireccionBiblioteca} \n");
+                            }
+                            sw.Close();
                             cerrarMenu = true;
                             break;
                         case 1:
