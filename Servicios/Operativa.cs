@@ -33,6 +33,7 @@ namespace Biblioteca.Servicios
                 Console.WriteLine("Dame el codigo para verificar a que biblioteca quieres acceder");
                 identificadorGlobal = Int32.Parse(Console.ReadLine());
             } while (!todosLosIdsBiblios.Contains(identificadorGlobal));    
+            program.idBiblioteca= identificadorGlobal;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Biblioteca.Controladores
             //Constructores de las clases e interfaces
             MenuInterfaz mi = new MenuImplementacion();
             BibliotecaImplementacion bl = new BibliotecaImplementacion();
+            ClienteImplementacion cl = new ClienteImplementacion(); 
           
 
             //Creacion de los ficheros
@@ -31,6 +32,8 @@ namespace Biblioteca.Controladores
                 //Aqui tendria que hacerse la añadida de la documentacion anterior de las listas
                 //Condicion de si existe el fichero se muestre por pantalla el contenido
                 condicionDeMostrarContenido(ficheroBibliotecaTotal);
+                guardarClienteBDD(ficheroClientes);
+
                 do
                 {
                     opcionMenuPrincipal = mi.menuInicial();
@@ -38,12 +41,21 @@ namespace Biblioteca.Controladores
                     {
                         case 0:
                             //Guardar ficheros
-                            StreamWriter sw = new StreamWriter(ficheroBibliotecaTotal);
+                            //Biblios
+                            StreamWriter swBLT = new StreamWriter(ficheroBibliotecaTotal);
                             foreach (BibliotecasDto biblio in bibliotecaLista)
                             {
-                                sw.Write($"{biblio.IdBiblioteca};{biblio.NombreBiblioteca};{biblio.DireccionBiblioteca} \n");
+                                swBLT.Write($"{biblio.IdBiblioteca};{biblio.NombreBiblioteca};{biblio.DireccionBiblioteca} \n");
                             }
-                            sw.Close();
+                            swBLT.Close();
+
+                            //Clientes
+                            StreamWriter swC = new StreamWriter(ficheroClientes);
+                            foreach (ClientesDto client in clienteLista)
+                            {
+                                swC.Write($"{client.IdClientes};{client.NombreCliente};{client.FechaNacimiento};{client.DNICliente};{client.CorreoCliente};{client.IdentificadorBibliotecaCliente}\n");
+                            }
+                            swC.Close();
                             cerrarMenu = true;
                             break;
                         case 1:
@@ -62,7 +74,7 @@ namespace Biblioteca.Controladores
                                         Console.WriteLine("[INFOS]- Se volvera a la pagina principal");
                                         break;
                                     case 1:
-                                        //Cliente Alta
+                                        cl.alta();
                                         break;
                                     case 2:
                                         //Libro alta
@@ -91,6 +103,7 @@ namespace Biblioteca.Controladores
                 Console.WriteLine("la pagina esta ahora mismo deshabilitada, por favor intentole de nuevo en 5 minutos");
                 StreamWriter swE = new StreamWriter(ficheroErrores);
                 swE.WriteLine(e.Message + "-->" + fecha);
+                swE.Write(e.StackTrace);
                 swE.Close();
 
             }
@@ -128,7 +141,25 @@ namespace Biblioteca.Controladores
                 Console.WriteLine("No hay ninguna biblioteca disponible para enseñar");
             }
         }
- 
+
+        //Se guarda el contenido de los dias anteriores en las listas de nuevo como una base de dtos
+        public static void guardarClienteBDD(string ficheroCliente)
+        {
+            if (File.Exists(ficheroCliente))
+            {
+                string[] contenidoFichero = File.ReadAllLines(ficheroCliente);
+                foreach (string contenido in contenidoFichero)
+                {
+                    string[] partesDeLaLineas = contenido.Split(';');
+                    ClientesDto client2 = new ClientesDto(Int64.Parse(partesDeLaLineas[0]), partesDeLaLineas[1], DateTime.Parse(partesDeLaLineas[2]), partesDeLaLineas[3], partesDeLaLineas[4], Int64.Parse(partesDeLaLineas[5]));
+                }
+            }
+            else
+            {
+                Console.WriteLine("No hay ningun cliente disponible");
+            }
+        }
+
 
         //Sirve para utilizarlo de Fk entre las demas funcionalidades y relacionarlas con la biblioteca(nos falta instanciarla)
         public static long idBiblioteca;
